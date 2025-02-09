@@ -1,58 +1,58 @@
 - name: Disable default nodeJS
-ansible.builtin.command: dnf module disable nodejs -y
+  ansible.builtin.command: dnf module disable nodejs -y
 
 - name: Enable nodeJS:20
-ansible.builtin.command: dnf module enable nodejs:20 -y
+  ansible.builtin.command: dnf module enable nodejs:20 -y
 
 - name: Install nodejs and mysql
-ansible.builtin.dnf:
-  name: "{{item}}"
-  state: latest
-loop:
-  - nodejs
-  - mysql
+  ansible.builtin.dnf:
+    name: "{{item}}"
+    state: latest
+  loop:
+    - nodejs
+    - mysql
 
 - name: adding user 
-ansible.builtin.user:
-  name: expense
+  ansible.builtin.user:
+    name: expense
 
 - name: import role
-ansible.builtin.import_role:
-  name: common
-  tasks_from: app-pre-req
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: app-pre-req
 
 - name: install npm dependencies
-ansible.builtin.command: npm install
-args:
-  chdir: "{{app_location}}"
+  ansible.builtin.command: npm install
+  args:
+    chdir: "{{app_location}}"
 
 - name: copy backend.service
-ansible.builtin.template:
-  src: backend.service.j2
-  dest: /etc/systemd/system/backend.service
+  ansible.builtin.template:
+    src: backend.service.j2
+    dest: /etc/systemd/system/backend.service
 
 - name: Install python mysql dependencies
-ansible.builtin.pip:
-  name:
-    - PyMySQL
-    - cryptography
-  executable: pip3.9 #based on python version, if it is 3.11 then use pip3.11
+  ansible.builtin.pip:
+    name:
+      - PyMySQL
+      - cryptography
+    executable: pip3.9 #based on python version, if it is 3.11 then use pip3.11
 
 - name: Import data to mysql
-community.mysql.mysql_db:
-  login_user: "{{login_user}}"
-  login_password: "{{mysql_root_password}}"
-  login_host: "{{login_host}}"
-  target: /app/schema/backend.sql
-  state: import
-  name: all
+  community.mysql.mysql_db:
+    login_user: "{{login_user}}"
+    login_password: "{{mysql_root_password}}"
+    login_host: "{{login_host}}"
+    target: /app/schema/backend.sql
+    state: import
+    name: all
     
 - name: daemon reload
-ansible.builtin.systemd_service:
-  daemon_reload: true
+  ansible.builtin.systemd_service:
+    daemon_reload: true
 
 - name: start and enable backend service
-ansible.builtin.service:
-  name: backend
-  state: started
-  enabled: true
+  ansible.builtin.service:
+    name: backend
+    state: started
+    enabled: true
