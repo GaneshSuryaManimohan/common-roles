@@ -21,6 +21,15 @@
     name: common
     tasks_from: app-pre-req
 
+- name: Check if app directory exists
+  ansible.builtin.stat:
+    path: "{{ app_location }}"
+  register: app_dir_status
+
+- name: Debug app_dir_status
+  ansible.builtin.debug:
+    msg: "App directory exists: {{ app_dir_status.stat.exists }}"
+
 - name: install npm dependencies
   ansible.builtin.command: npm install
   args:
