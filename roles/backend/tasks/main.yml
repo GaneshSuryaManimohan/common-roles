@@ -16,10 +16,10 @@
   ansible.builtin.user:
     name: expense
 
-- name: import role
+- name: running tasks from imported role
   ansible.builtin.import_role:
     name: common
-    tasks_from: app-pre-req
+    tasks_from: app-prereq
 
 - name: install npm dependencies
   ansible.builtin.command: npm install
