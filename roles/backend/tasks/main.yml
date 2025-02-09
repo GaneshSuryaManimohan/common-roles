@@ -23,8 +23,8 @@
 
 - name: install npm dependencies
   ansible.builtin.command: npm install
-    args:
-      chdir: /app
+  args:
+  chdir: /app
   
 - name: copy backend.service
   ansible.builtin.template:
@@ -54,5 +54,5 @@
 - name: start and enable backend service
   ansible.builtin.service:
     name: backend
-      state: started
-      enabled: true
+    state: started
+    enabled: true
