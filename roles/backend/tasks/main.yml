@@ -36,7 +36,7 @@
     name:
       - PyMySQL
       - cryptography
-  executable: pip3.9 #based on python version, if it is 3.11 then use pip3.11
+    executable: pip3.9 #based on python version, if it is 3.11 then use pip3.11
 
 - name: Import data to mysql
   community.mysql.mysql_db:
