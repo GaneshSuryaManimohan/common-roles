@@ -1,0 +1,4 @@
+  - name: create "{{app_location}}" directory
+    ansible.builtin.file:
+      path: "{{app_location}}"
+      state: directory
