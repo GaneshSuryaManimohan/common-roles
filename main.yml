@@ -1,0 +1,5 @@
+- name: configuring {{component}} server
+  hosts: frontend
+  become: true
+  roles:
+    - "{{component}}"
