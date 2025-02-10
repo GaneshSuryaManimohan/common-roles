@@ -2,6 +2,10 @@
   hosts: localhost
   vars:
     zones: surya-devops.online
+    instances:
+    - db
+    - backend
+    - frontend
   tasks:
   - name: create ec2 instances
     amazon.aws.ec2_instance:
@@ -13,9 +17,7 @@
       tags:
         Name: "{{item}}"
     loop:
-    - db
-    - backend
-    - frontend
+    - "{{instances}}"
     register: ec2_instanes_info
 
   - name: print output
@@ -23,6 +25,14 @@
       msg: "Output {{ec2_instanes_info}}"
 
 
-  # - name: create r53 records
-  #   amazon.aws.route53:
-
+  - name: create r53 records
+    amazon.aws.route53:
+      state: present
+      zone: "{{zones}}"
+      record: "{{item}}.{{zone}}"
+      type: A
+      value: "{{item.private_ip_address}}"
+      overwrite: true
+      ttl: 5
+    loop:
+    - "{{results.instances}}"
