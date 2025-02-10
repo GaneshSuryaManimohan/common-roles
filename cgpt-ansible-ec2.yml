@@ -42,7 +42,7 @@
       amazon.aws.route53:
         state: present
         zone: "surya-devops.online"
-        record: "frontend.surya-devops.online"
+        record: "surya-devops.online"
         type: A
         ttl: 5
         value: "{{ frontend_public_ip }}"
