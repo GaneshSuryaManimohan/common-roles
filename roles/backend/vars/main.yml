@@ -4,4 +4,3 @@ mysql_root_password: ExpenseApp@1
 DB_HOST: db.surya-devops.online
 app_location: /app
 component: backend
-dest: /tmp/backend.zip
