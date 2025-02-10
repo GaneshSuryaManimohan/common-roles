@@ -1,0 +1,48 @@
+- name: Create EC2 Instances and Update Route53
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Launch EC2 instances with public IPs
+      amazon.aws.ec2_instance:
+        name: "{{ item.name }}"
+        instance_type: t2.micro
+        region: us-east-1
+        image_id: ami-09c813fb71547fc4f  # Replace with a valid AMI ID
+        security_group: allow-everything  # Replace with a valid security group
+        network:
+          assign_public_ip: yes  # Assigns public IP to all instances
+        wait: yes
+      register: ec2_instances
+      loop:
+        - { name: "db" }
+        - { name: "backend" }
+        - { name: "frontend" }
+
+    - name: Extract IPs
+      set_fact:
+        db_private_ip: "{{ ec2_instances.results[0].instances[0].private_ip_address }}"
+        backend_private_ip: "{{ ec2_instances.results[1].instances[0].private_ip_address }}"
+        frontend_public_ip: "{{ ec2_instances.results[2].instances[0].public_ip_address }}"
+
+    - name: Update Route53 with DB and Backend private IPs
+      amazon.aws.route53:
+        state: present
+        zone: "surya-devops.online"
+        record: "{{ item.name }}.surya-devops.online"
+        type: A
+        ttl: 5
+        value: "{{ item.ip }}"
+        aws_region: us-east-1
+      loop:
+        - { name: "db", ip: "{{ db_private_ip }}" }
+        - { name: "backend", ip: "{{ backend_private_ip }}" }
+
+    - name: Update Route53 with Frontend public IP
+      amazon.aws.route53:
+        state: present
+        zone: "surya-devops.online"
+        record: "frontend.surya-devops.online"
+        type: A
+        ttl: 5
+        value: "{{ frontend_public_ip }}"
+        aws_region: us-east-1
