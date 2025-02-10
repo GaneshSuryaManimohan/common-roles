@@ -22,7 +22,7 @@
 
   - name: print output
     ansible.builtin.debug:
-      msg: "Output {{ec2_instanes_info}}"
+      msg: "Output {{ec2_instances_info}}"
 
 
   - name: create r53 records
@@ -35,4 +35,4 @@
       overwrite: true
       ttl: 5
     loop:
-    - "{{results.instances}}"
+    - "{{ec2_instances_info.results.instances}}"
