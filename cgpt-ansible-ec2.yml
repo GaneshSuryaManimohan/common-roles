@@ -32,7 +32,7 @@
         type: A
         ttl: 5
         value: "{{ item.ip }}"
-        aws_region: us-east-1
+        hosted_zone_id: Z07132903T2RITB7RWQLU
       loop:
         - { name: "db", ip: "{{ db_private_ip }}" }
         - { name: "backend", ip: "{{ backend_private_ip }}" }
@@ -45,4 +45,5 @@
         type: A
         ttl: 5
         value: "{{ frontend_public_ip }}"
-        aws_region: us-east-1
+        hosted_zone_id: Z07132903T2RITB7RWQLU
+
