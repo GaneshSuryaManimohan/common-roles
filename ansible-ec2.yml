@@ -1,0 +1,23 @@
+- name: create ec2 and r53 records
+  hosts: localhost
+  vars:
+    zones: surya-devops.online
+  tasks:
+  - name: create ec2 instances
+    amazon.aws.ec2_instance:
+      instance_type: t2.micro
+      region: us-east-1
+      name: "{{item}}"
+      security_group: allow-everything
+      image_id: ami-090252cbe067a9e58
+      tags:
+        Name: "{{item}}"
+    loop:
+    - db
+    - backend
+    - frontend
+    register: ec2_instanes_info
+
+  # - name: create r53 records
+  #   amazon.aws.route53:
+
