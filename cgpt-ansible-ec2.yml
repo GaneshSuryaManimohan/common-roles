@@ -27,8 +27,8 @@
     - name: Update Route53 with DB and Backend private IPs
       amazon.aws.route53:
         state: present
-        zone: "surya-devops.online"
-        record: "{{ item.name }}.surya-devops.online"
+        zone: "surya-devops.site"
+        record: "{{ item.name }}.surya-devops.site"
         type: A
         ttl: 5
         value: "{{ item.ip }}"
@@ -41,8 +41,8 @@
     - name: Update Route53 with Frontend public IP
       amazon.aws.route53:
         state: present
-        zone: "surya-devops.online"
-        record: "surya-devops.online"
+        zone: "surya-devops.site"
+        record: "surya-devops.site"
         type: A
         ttl: 5
         value: "{{ frontend_public_ip }}"

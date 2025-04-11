@@ -1,7 +1,7 @@
 - name: create ec2 and r53 records
   hosts: localhost
   vars:
-    zones: surya-devops.online
+    zones: surya-devops.site
     instances:
     - db
     - backend
